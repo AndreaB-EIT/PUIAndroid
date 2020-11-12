@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PUIAndroid</string>
+    <string name="article_image_description">article image</string>
+    <string name="category">category</string>
+    <string name="title">title</string>
+    <string name="aabstract">article abstract</string>
+</resources>
