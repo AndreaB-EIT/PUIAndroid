@@ -4,4 +4,6 @@
     <string name="category">category</string>
     <string name="title">title</string>
     <string name="aabstract">article abstract</string>
+    <string name="new_article_floating_action_button">New article Floating Action button</string>
+    <string name="login">Login</string>
 </resources>
