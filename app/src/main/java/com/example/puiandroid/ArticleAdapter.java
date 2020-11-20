@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.example.puiandroid.model.Article;
 
@@ -36,13 +37,22 @@ public class ArticleAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return data.get(position).id;
+        return data.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.article_card_layout, null);
+
+        TextView textViewCategory = view.findViewById(R.id.lbl_category);
+        textViewCategory.setText(data.get(position).getCategory());
+
+        TextView textViewTitle = view.findViewById(R.id.lbl_title);
+        textViewTitle.setText(data.get(position).getTitleText());
+
+        TextView textViewAbstract = view.findViewById(R.id.lbl_aabstract);
+        textViewAbstract.setText(data.get(position).getAbstractText());
 
         return view;
     }
