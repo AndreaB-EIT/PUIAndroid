@@ -5,9 +5,9 @@ import java.net.PasswordAuthentication;
 import java.util.Properties;
 
 public class RESTConnection {
-    private Properties ini  = null;
+    // private Properties ini  = null;
     protected String idUser = null;
-    protected String authType;
+    protected String authType = null;
     protected String apikey;
 
     public void clear(){
@@ -18,7 +18,7 @@ public class RESTConnection {
 
     protected boolean isAdministrator = false;
 
-    protected String serviceUrl ;
+    protected String serviceUrl;
 
     protected boolean requireSelfSigned = false;
 
@@ -33,17 +33,19 @@ public class RESTConnection {
     public static final String ATTR_APACHE_AUTH_USER = "";
     public static final String ATTR_APACHE_AUTH_PASS = "";
 
-    protected RESTConnection(Properties ini){
-        this.ini = ini;
+    //protected RESTConnection(Properties ini){
+    protected RESTConnection(String url){
+        /*this.ini = ini;
         if (!ini.containsKey(ATTR_SERVICE_URL)){
             throw new IllegalArgumentException("Required attribute '"+ ATTR_SERVICE_URL+"' not found!");
-        }
+        }*/
 
         // disable auth from self signed certificates
-        requireSelfSigned =  (ini.containsKey(ATTR_REQUIRE_SELF_CERT) && ((String)ini.get(ATTR_REQUIRE_SELF_CERT)).equalsIgnoreCase("TRUE"));
+        // requireSelfSigned = (ini.containsKey(ATTR_REQUIRE_SELF_CERT) && ((String)ini.get(ATTR_REQUIRE_SELF_CERT)).equalsIgnoreCase("TRUE"));
+        requireSelfSigned = true;
 
         // add proxy http/https to the system
-        if (ini.contains(ATTR_PROXY_HOST) && ini.contains(ATTR_PROXY_PORT)){
+        /*if (ini.contains(ATTR_PROXY_HOST) && ini.contains(ATTR_PROXY_PORT)){
             String proxyHost = (String)ini.get(ATTR_PROXY_HOST);
             String proxyPort = (String)ini.get(ATTR_PROXY_PORT);
 
@@ -69,8 +71,8 @@ public class RESTConnection {
                         }
                     }
             );
-        }
+        }*/
 
-        serviceUrl = ini.getProperty(ATTR_SERVICE_URL);
+        serviceUrl = url;
     }
 }

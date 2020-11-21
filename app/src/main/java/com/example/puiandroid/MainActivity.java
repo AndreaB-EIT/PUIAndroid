@@ -1,46 +1,72 @@
 package com.example.puiandroid;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import com.example.puiandroid.task.APIArticleDownload;
 import com.example.puiandroid.task.LoadArticlesTask;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.puiandroid.utils.network.ModelManager;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String PREF_NAME_TEXT = "EIT_News_Login";
+    private static final String PREF_NAME_ATTRIBUTE_USERID = "userID";
+    private static final String PREF_NAME_ATTRIBUTE_APIKEY = "APIKEY";
+    private static final String PREF_NAME_ATTRIBUTE_AUTHTYPE = "authtype";
+    private static final String TAG = "LoadArticlesTask";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("List of articles");
+        ((TextView)findViewById(R.id.lbl_greetings)).setText("Fetching your articles, one moment please...");
 
-        ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Fetching the articles, one moment please...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        ModelManager.configureConnection("https://sanger.dia.fi.upm.es/pmd-task/");
 
-        LoadArticlesTask loadArticlesTask = new LoadArticlesTask();
+        // if connected (check for preferences)
+        // Read from app preferences the stored values
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab_login);
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME_TEXT, Context.MODE_PRIVATE);
+        String userID = preferences.getString(PREF_NAME_ATTRIBUTE_USERID, "default");
+        String apikey = preferences.getString(PREF_NAME_ATTRIBUTE_APIKEY, "default");
+        String authtype = preferences.getString(PREF_NAME_ATTRIBUTE_AUTHTYPE, "default");
+        if(userID != "default" && apikey != "default" && authtype != "default") {
+            fab.setText("LOGOUT");
+            fab.setOnClickListener(v -> {
+                ModelManager.logout();
+                SharedPreferences loggingout = getSharedPreferences(PREF_NAME_TEXT,Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = loggingout.edit();
+                editor.clear();
+                editor.apply();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            });
+            ModelManager.stayloggedin(userID, preferences.getString(PREF_NAME_ATTRIBUTE_APIKEY, "default"), preferences.getString(PREF_NAME_ATTRIBUTE_AUTHTYPE, "default"));
+        } else {
+            fab.setOnClickListener(v -> {
+                Intent login = new Intent(getApplicationContext(), Login.class);
+                startActivity(login);
+            });
+        }
+
+        // if the preferences contain the data, call the stay logged in with that data, else set up the group's api key (empty for user id and api key of the group and constant string for the auth) PUIRESTAUTH
+
+        LoadArticlesTask loadArticlesTask = new LoadArticlesTask(this);
         loadArticlesTask.execute();
 
-        progressDialog.dismiss();
+        ListView listView = findViewById(R.id.lst_articles);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent details = new Intent(getApplicationContext(), ArticleDetailsActivity.class);
+            details.putExtra("id", (int)id);
+            startActivity(details);
 
-        // LoadArticlesTask downloadTask = new LoadArticlesTask();
-        // Thread downloadThread = new Thread(downloadTask);
-        // downloadThread.start();
-
-        FloatingActionButton fab = findViewById(R.id.fab_login);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent login = new Intent(getApplicationContext(), Login.class);
-
-                startActivity(login);
-
-            }
         });
     }
 }

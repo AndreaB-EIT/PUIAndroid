@@ -111,6 +111,9 @@ public class Article extends ModelEntity {
 	public void setSubtitleText(String subtitle) {
 		this.subtitle = subtitle;
 	}
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
 	
 	public int getIdUser(){
 		return idUser;

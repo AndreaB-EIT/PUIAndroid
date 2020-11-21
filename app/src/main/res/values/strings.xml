@@ -6,4 +6,6 @@
     <string name="aabstract">article abstract</string>
     <string name="new_article_floating_action_button">New article Floating Action button</string>
     <string name="login">Login</string>
+    <string name="greetings">Hello, guest! You may login with the bottom right button!</string>
+    <string name="back">Back</string>
 </resources>

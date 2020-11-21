@@ -5,7 +5,7 @@ import android.widget.ListView;
 
 // import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.puiandroid.ArticleAdapter;
+import com.example.puiandroid.RowArticleAdapter;
 import com.example.puiandroid.R;
 import com.example.puiandroid.model.Article;
 import com.example.puiandroid.network.NetUtils;
@@ -18,7 +18,6 @@ import java.util.List;
 public class APIArticleDownload implements Runnable {
 
     private static final String API_ARTICLE_BASE_URL = "http://sanger.dia.fi.upm.es/pmd-task/public/list-example/";
-    // private static final String API_PLANET_URL_GET_LIST_METHOD = "planets.php";
     private Activity activity;
 
     static GsonBuilder gsonBuilder = new GsonBuilder();
@@ -37,7 +36,7 @@ public class APIArticleDownload implements Runnable {
             e.printStackTrace();
         }
 
-        final List<Article> articleList = Arrays.asList(gson.fromJson(result, Article[].class));
+        final Article article = gson.fromJson(result, Article.class);
 
         /* for (int i = 0; i < articleList.size(); i++) {
             articleList.get(i).getImageName();
@@ -52,10 +51,10 @@ public class APIArticleDownload implements Runnable {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ListView recyclerView = activity.findViewById(R.id.rls_articles);
-                ArticleAdapter adapter = new ArticleAdapter(activity);
+                /*ListView recyclerView = activity.findViewById(R.id.lst_articles);
+                RowArticleAdapter adapter = new RowArticleAdapter(activity);
                 adapter.addArticles(articleList);
-                recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);*/
             }
         });
 

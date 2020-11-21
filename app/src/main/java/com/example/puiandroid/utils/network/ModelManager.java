@@ -1,6 +1,8 @@
 package com.example.puiandroid.utils.network;
 
 
+import android.content.SharedPreferences;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -10,15 +12,22 @@ import java.util.List;
 import java.util.Properties;
 import org.json.simple.JSONObject;
 
+import com.example.puiandroid.MainActivity;
 import com.example.puiandroid.model.Article;
 import com.example.puiandroid.model.Image;
 import com.example.puiandroid.utils.network.exceptions.AuthenticationError;
 import com.example.puiandroid.utils.Logger;
 import com.example.puiandroid.utils.network.exceptions.ServerCommunicationError;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.puiandroid.utils.network.ServiceCallUtils.parseHttpStreamResult;
 
 public class ModelManager {
+    /*private static final String PREF_NAME_TEXT = "EIT_News_Login";
+    private static final String PREF_NAME_ATTRIBUTE_1 = "userID";
+    private static final String PREF_NAME_ATTRIBUTE_2 = "APIKEY";
+    private static final String PREF_NAME_ATTRIBUTE_3 = "authtype";*/
+
     private static RESTConnection rc = null;
 
     public static boolean isConnected(){
@@ -42,14 +51,14 @@ public class ModelManager {
      * @param ini Initializes entity manager urls and users
      * @throws AuthenticationError
      */
-    public static void configureConnection(Properties ini)  {
-        rc = new RESTConnection(ini);
+    public static void configureConnection(String url)  {
+        rc = new RESTConnection(url);
     }
 
     public static void stayloggedin(String idUser, String apikey, String authType) {
         rc.idUser = idUser;
-        rc.authType = authType;
         rc.apikey = apikey;
+        rc.authType = authType; // PUI rest auth
     }
 
         /**
@@ -110,6 +119,10 @@ public class ModelManager {
             //e.printStackTrace();
             throw new AuthenticationError(e.getMessage());
         }
+    }
+
+    public static void logout() {
+        rc.clear();
     }
 
     /**

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDFFF5"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <Button
+            android:id="@+id/btn_details_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/back" />
+
+        <TextView
+            android:id="@+id/lbl_details_wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Getting your article's details, one moment please..."
+            android:textSize="18sp" />
+
+        <ProgressBar
+            android:id="@+id/pgb_details"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100" />
+
+        <LinearLayout
+            android:id="@+id/lly_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/lbl_details_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Category" />
+
+            <TextView
+                android:id="@+id/lbl_details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="Title"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lbl_details_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="Subtitle"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/img_details_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                tools:srcCompat="@drawable/upmlogo" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
+
+                <Button
+                    android:id="@+id/btn_details_editpic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="Change picture"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_details_undo_edit"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <Button
+                    android:id="@+id/btn_details_undo_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:enabled="false"
+                    android:text="Undo edit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_details_editpic"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/lbl_details_abstract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Abstract"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lbl_details_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elegantTextHeight="true"
+                android:paddingBottom="12dp"
+                android:text="Body" />
+
+            <TextView
+                android:id="@+id/lbl_details_last_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last update date"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
