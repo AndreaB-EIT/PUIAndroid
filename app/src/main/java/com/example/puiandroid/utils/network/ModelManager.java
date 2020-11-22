@@ -359,7 +359,7 @@ public class ModelManager {
         }
     }
 
-    private static int saveImage(Image i) throws ServerCommunicationError{
+    public static int saveImage(Image i) throws ServerCommunicationError{
         try{
             String parameters =  "";
             String request = rc.serviceUrl + "article/image";
@@ -375,7 +375,7 @@ public class ModelManager {
             connection.setRequestProperty("Content-Type","application/json; charset=UTF-8");
             connection.setRequestProperty("Authorization", getAuthTokenHeader());
             connection.setRequestProperty("charset", "utf-8");
-            connection.setUseCaches (false);
+            connection.setUseCaches(false);
 
             ServiceCallUtils.writeJSONParams(connection, i.toJSON());
 

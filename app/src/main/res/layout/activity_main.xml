@@ -7,6 +7,22 @@
     android:background="#D2FFF2"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/lbl_no_articles_found"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="224dp"
+        android:layout_marginEnd="64dp"
+        android:elegantTextHeight="true"
+        android:text="@string/sorry_no_articles_were_found_for_this_category"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_login"
         android:layout_width="wrap_content"
@@ -16,7 +32,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Login"
-        app:icon="@android:drawable/ic_media_next"
+        app:icon="@drawable/login_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,12 +64,55 @@
             android:max="100"
             android:visibility="visible" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tbs_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D2FFF2"
+            android:paddingBottom="8dp"
+            android:visibility="invisible"
+            app:tabMode="scrollable">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_national"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="National" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_economy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Economy" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_sports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sports" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_technology"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Technology" />
+
+        </com.google.android.material.tabs.TabLayout>
+
         <ListView
             android:id="@+id/lst_articles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
-            android:dividerHeight="12dp" />
+            android:dividerHeight="12dp" >
+
+        </ListView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

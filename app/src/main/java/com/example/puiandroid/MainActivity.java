@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puiandroid.task.LoadArticlesTask;
 import com.example.puiandroid.utils.network.ModelManager;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         String authtype = preferences.getString(PREF_NAME_ATTRIBUTE_AUTHTYPE, "default");
         if(userID != "default" && apikey != "default" && authtype != "default") {
             fab.setText("LOGOUT");
+            fab.setIcon(getResources().getDrawable(R.drawable.logout_icon, getTheme()));
+
             fab.setOnClickListener(v -> {
                 ModelManager.logout();
                 SharedPreferences loggingout = getSharedPreferences(PREF_NAME_TEXT,Context.MODE_PRIVATE);
@@ -65,8 +71,53 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent details = new Intent(getApplicationContext(), ArticleDetailsActivity.class);
             details.putExtra("id", (int)id);
+            details.putExtra("orderIfEdit", position);
             startActivity(details);
 
         });
+
+        TabLayout tabLayout = findViewById(R.id.tbs_main);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                //do stuff here
+                switch(tab.getText().toString()) {
+                    case "National":
+                        LoadArticlesTask loadArticlesTaskN = new LoadArticlesTask(MainActivity.this, "National");
+                        loadArticlesTaskN.execute();
+                        break;
+                    case "Economy":
+                        LoadArticlesTask loadArticlesTaskE = new LoadArticlesTask(MainActivity.this, "Economy");
+                        loadArticlesTaskE.execute();
+                        break;
+                    case "Sports":
+                        LoadArticlesTask loadArticlesTaskS = new LoadArticlesTask(MainActivity.this, "Sports");
+                        loadArticlesTaskS.execute();
+                        break;
+                    case "Technology":
+                        LoadArticlesTask loadArticlesTaskT = new LoadArticlesTask(MainActivity.this, "Technology");
+                        loadArticlesTaskT.execute();
+                        break;
+                    case "All":
+                        LoadArticlesTask loadArticlesTask = new LoadArticlesTask(MainActivity.this);
+                        loadArticlesTask.execute();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
+
+
 }

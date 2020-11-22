@@ -2,6 +2,7 @@ package com.example.puiandroid.task;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,9 +12,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import com.example.puiandroid.ArticleDetailsActivity;
 import com.example.puiandroid.MainActivity;
 import com.example.puiandroid.R;
 import com.example.puiandroid.RowArticleAdapter;
@@ -29,9 +32,15 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
 	private Activity activity;
 	private ProgressBar progressBar;
 	private String greetings;
+	private String filter = "All";
 
     public LoadArticlesTask(Activity activity) {
         this.activity = activity;
+    }
+
+    public LoadArticlesTask(Activity activity, String filter) {
+        this.activity = activity;
+        this.filter = filter;
     }
 
     @Override
@@ -39,7 +48,20 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
         super.onPreExecute();
 
         progressBar = activity.findViewById(R.id.pgb_main);
+        progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
+    }
+
+    public List<Article> getFilteredList(List<Article> list) {
+        List<Article> filtered = new LinkedList<>();
+
+        for (Article article : list) {
+            if (article.getCategory().equals(filter)) {
+                filtered.add(article);
+                Log.i(TAG, "just got this: " + article.getCategory());
+            }
+        }
+        return filtered;
     }
 
     @Override
@@ -59,8 +81,13 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
         try {
             // obtain 6 articles from offset 0
             progressBar.setProgress(20);
-            res = ModelManager.getArticles(6, 0);
+            // res = ModelManager.getArticles(6, 0);
+            res = ModelManager.getArticles();
             progressBar.setProgress(30);
+            if (filter != "All") {
+                res = getFilteredList(res);
+                progressBar.setProgress(40);
+            }
             for (Article article : res) {
                 // We print articles in Log
                 Log.i(TAG, article.toString());
@@ -80,13 +107,19 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
 
         progressBar.setProgress(80);
 
-        ListView recyclerView = activity.findViewById(R.id.lst_articles);
+        if (articles.size() == 0)
+            activity.findViewById(R.id.lbl_no_articles_found).setVisibility(View.VISIBLE);
+        else
+            activity.findViewById(R.id.lbl_no_articles_found).setVisibility(View.GONE);
+
+        ListView listView = activity.findViewById(R.id.lst_articles);
         RowArticleAdapter adapter = new RowArticleAdapter(activity);
         adapter.addArticles(articles);
-        recyclerView.setAdapter(adapter);
+        listView.setAdapter(adapter);
 
         ((TextView)activity.findViewById(R.id.lbl_greetings)).setText(greetings);
         activity.findViewById(R.id.lbl_greetings).setPadding(0,8,0,24);
+        activity.findViewById(R.id.tbs_main).setVisibility(View.VISIBLE);
 
         progressBar.setVisibility(View.GONE);
 

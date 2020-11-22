@@ -14,7 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.puiandroid.model.Image;
 import com.example.puiandroid.task.LoadSingleArticleTask;
+import com.example.puiandroid.task.SaveNewImageTask;
+import com.example.puiandroid.utils.SerializationUtils;
 import com.example.puiandroid.utils.network.ModelManager;
 
 import java.io.FileNotFoundException;
@@ -25,14 +28,17 @@ public class ArticleDetailsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_OPEN_IMAGE = 1;
     private static Bitmap before;
+    private static int idArticle;
+    private static int orderIfEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_details);
 
-        int articleId = getIntent().getExtras().getInt("id");
-        LoadSingleArticleTask task = new LoadSingleArticleTask(this, articleId);
+        idArticle = getIntent().getExtras().getInt("id");
+        orderIfEdit = getIntent().getExtras().getInt("orderIfEdit");
+        LoadSingleArticleTask task = new LoadSingleArticleTask(this, idArticle);
         task.execute();
 
         Button back = findViewById(R.id.btn_details_back);
@@ -44,9 +50,9 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         Button editPic = findViewById(R.id.btn_details_editpic);
         Button undoEdit = findViewById(R.id.btn_details_undo_edit);
         if(!ModelManager.isConnected()) {
-            editPic.setVisibility(View.INVISIBLE);
+            editPic.setVisibility(View.GONE);
             editPic.setEnabled(false);
-            undoEdit.setVisibility(View.INVISIBLE);
+            undoEdit.setVisibility(View.GONE);
             undoEdit.setEnabled(false);
         } else {
             editPic.setVisibility(View.VISIBLE);
@@ -60,7 +66,8 @@ public class ArticleDetailsActivity extends AppCompatActivity {
             before = drawable.getBitmap();
             undoEdit.setEnabled(true);
             undoEdit.setOnClickListener(v1 -> {
-                imageView.setImageBitmap(before);
+                SaveNewImageTask undoTask = new SaveNewImageTask(before, orderIfEdit, idArticle, "undoEdit", this);
+                undoTask.execute();
             });
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -82,9 +89,9 @@ public class ArticleDetailsActivity extends AppCompatActivity {
                     try {
                         stream = getContentResolver().openInputStream(data.getData());
                         Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                        ImageView img = findViewById(R.id.img_details_image);
-                        img.setImageBitmap(bitmap);
 
+                        SaveNewImageTask task = new SaveNewImageTask(bitmap, orderIfEdit, idArticle, "edit", this);
+                        task.execute();
                     }
                     catch (FileNotFoundException e) {
                         e.printStackTrace();

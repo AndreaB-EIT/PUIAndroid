@@ -140,6 +140,7 @@ public class Article extends ModelEntity {
 	@Override
 	public String toString() {
 		return "Article [id=" + getId()
+				+", category=" + category
 				+", titleText=" + titleText  
 				+", abstractText=" + abstractText 
 				+  ", bodyText="	+ bodyText + ", subtitleText=" + subtitle

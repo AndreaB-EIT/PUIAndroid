@@ -2,6 +2,7 @@ package com.example.puiandroid;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,16 @@ import java.util.List;
 public class RowArticleAdapter extends BaseAdapter {
     // the adapter is the link between data and UI
     private List<Article> data = new LinkedList<>();
-    Context context;
+    private Context context;
+    private String filter = "All";
 
     public RowArticleAdapter(Context context) {
         this.context = context;
+    }
+
+    public RowArticleAdapter(Context context, String filter) {
+        this.context = context;
+        this.filter = filter;
     }
 
     public void addArticles(List<Article> list) {
@@ -47,11 +54,25 @@ public class RowArticleAdapter extends BaseAdapter {
 
     // click on a row = new activity, get single article
 
+    public List<Article> getFilteredList() {
+        List<Article> filtered = new LinkedList<>();
+
+        for (Article article : data)
+            if (article.getCategory() == filter)
+                filtered.add(article);
+
+        return filtered;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        if(filter != "All") {
+            data = getFilteredList();
+        }
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.article_card_layout, null);
-        InputStream stream = null;
 
         ImageView imageViewThumbnail = view.findViewById(R.id.img_row_image);
         Bitmap image = null;

@@ -8,4 +8,5 @@
     <string name="login">Login</string>
     <string name="greetings">Hello, guest! You may login with the bottom right button!</string>
     <string name="back">Back</string>
+    <string name="sorry_no_articles_were_found_for_this_category">Sorry, no articles were found for the selected category</string>
 </resources>
