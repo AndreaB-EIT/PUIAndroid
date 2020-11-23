@@ -1,13 +1,11 @@
 package com.example.puiandroid.task;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,7 +17,6 @@ import com.example.puiandroid.utils.network.exceptions.ServerCommunicationError;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class LoadSingleArticleTask extends AsyncTask<Void, Void, Article> {
@@ -55,42 +52,43 @@ public class LoadSingleArticleTask extends AsyncTask<Void, Void, Article> {
             Log.e(TAG,e.getMessage());
         }
         progressBar.setProgress(50);
+
         return res;
     }
 
     @Override
     protected void onPostExecute(Article article) {
         super.onPostExecute(article);
-        progressBar.setProgress(60);
-
         activity.setTitle(article.getTitleText());
+        progressBar.setProgress(60);
 
         TextView category = activity.findViewById(R.id.lbl_details_category);
         category.setText(article.getCategory());
 
         TextView title = activity.findViewById(R.id.lbl_details_title);
-        title.setText(article.getTitleText());
+        title.setText(android.text.Html.fromHtml(article.getTitleText()).toString());
 
         TextView subtitle = activity.findViewById(R.id.lbl_details_subtitle);
-        subtitle.setText(article.getSubtitleText());
+        subtitle.setText(android.text.Html.fromHtml(article.getSubtitleText()).toString());
 
         ImageView image = activity.findViewById(R.id.img_details_image);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         try {
-            bitmap = SerializationUtils.base64StringToImg(article.getImage().getImage());
+            if(article.getImage() != null) {
+                bitmap = SerializationUtils.base64StringToImg(article.getImage().getImage());
+                image.setImageBitmap(bitmap);
+            }
+            else
+                image.setImageDrawable(activity.getResources().getDrawable(R.drawable.upmlogo, activity.getTheme()));
         } catch (ServerCommunicationError serverCommunicationError) {
             serverCommunicationError.printStackTrace();
         }
-        if (bitmap == null)
-            image.setImageDrawable(activity.getResources().getDrawable(R.drawable.upmlogo, activity.getTheme()));
-        else
-            image.setImageBitmap(bitmap);
 
         TextView aabstract = activity.findViewById(R.id.lbl_details_abstract);
-        aabstract.setText(article.getAbstractText());
+        aabstract.setText(android.text.Html.fromHtml(article.getAbstractText()).toString());
 
         TextView body = activity.findViewById(R.id.lbl_details_body);
-        body.setText(article.getBodyText());
+        body.setText(android.text.Html.fromHtml(article.getBodyText()).toString());
 
         progressBar.setProgress(90);
 
@@ -107,7 +105,5 @@ public class LoadSingleArticleTask extends AsyncTask<Void, Void, Article> {
         activity.findViewById(R.id.lbl_details_wait).setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
         activity.findViewById(R.id.lly_content).setVisibility(View.VISIBLE);
-
     }
-
 }

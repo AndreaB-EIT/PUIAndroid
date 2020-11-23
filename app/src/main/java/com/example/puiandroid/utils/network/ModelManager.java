@@ -1,32 +1,23 @@
 package com.example.puiandroid.utils.network;
 
-
-import android.content.SharedPreferences;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+
 import org.json.simple.JSONObject;
 
-import com.example.puiandroid.MainActivity;
 import com.example.puiandroid.model.Article;
 import com.example.puiandroid.model.Image;
 import com.example.puiandroid.utils.network.exceptions.AuthenticationError;
 import com.example.puiandroid.utils.Logger;
 import com.example.puiandroid.utils.network.exceptions.ServerCommunicationError;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.example.puiandroid.utils.network.ServiceCallUtils.parseHttpStreamResult;
 
 public class ModelManager {
-    /*private static final String PREF_NAME_TEXT = "EIT_News_Login";
-    private static final String PREF_NAME_ATTRIBUTE_1 = "userID";
-    private static final String PREF_NAME_ATTRIBUTE_2 = "APIKEY";
-    private static final String PREF_NAME_ATTRIBUTE_3 = "authtype";*/
 
     private static RESTConnection rc = null;
 

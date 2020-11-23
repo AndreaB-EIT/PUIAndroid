@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,7 +14,7 @@ import com.example.puiandroid.utils.SerializationUtils;
 import com.example.puiandroid.utils.network.ModelManager;
 import com.example.puiandroid.utils.network.exceptions.ServerCommunicationError;
 
-public class SaveNewImageTask extends AsyncTask<Void, Void, Boolean> {
+public class SaveNewImageTask extends AsyncTask<Void, Void, Void> {
 
     private Bitmap bitmap;
     private int orderIfEdit;
@@ -48,9 +47,7 @@ public class SaveNewImageTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
         activity.findViewById(R.id.btn_details_back).setEnabled(false);
-
         progressBar = activity.findViewById(R.id.pgb_details_image_edit);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
@@ -59,7 +56,7 @@ public class SaveNewImageTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected Void doInBackground(Void... voids) {
         try {
             Image image = new Image(orderIfEdit, "", idArticle, SerializationUtils.imgToBase64String(bitmap));
             progressBar.setProgress(20);
@@ -68,20 +65,19 @@ public class SaveNewImageTask extends AsyncTask<Void, Void, Boolean> {
         } catch (ServerCommunicationError authenticationError) {
             authenticationError.printStackTrace();
         }
-        return true;
+        return null;
     }
 
     @Override
-    protected void onPostExecute(Boolean aVoid) {
+    protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-
         progressBar.setVisibility(View.GONE);
+
         ImageView img = activity.findViewById(R.id.img_details_image);
         img.setImageBitmap(bitmap);
         if (message.equals("Restored the previous image!"))
             activity.findViewById(R.id.btn_details_undo_edit).setEnabled(false);
         activity.findViewById(R.id.btn_details_back).setEnabled(true);
-
 
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
     }

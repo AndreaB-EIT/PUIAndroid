@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D2FFF2"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/lbl_no_articles_found"
@@ -51,7 +51,7 @@
             android:id="@+id/lbl_greetings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="64dp"
+            android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="@string/greetings"
             android:textSize="18sp" />

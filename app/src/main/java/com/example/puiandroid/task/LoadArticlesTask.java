@@ -1,28 +1,20 @@
 package com.example.puiandroid.task;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
-import com.example.puiandroid.ArticleDetailsActivity;
-import com.example.puiandroid.MainActivity;
 import com.example.puiandroid.R;
-import com.example.puiandroid.RowArticleAdapter;
+import com.example.puiandroid.adapters.RowArticleAdapter;
 import com.example.puiandroid.model.Article;
 import com.example.puiandroid.utils.network.ModelManager;
-import com.example.puiandroid.utils.network.RESTConnection;
 import com.example.puiandroid.utils.network.exceptions.AuthenticationError;
 import com.example.puiandroid.utils.network.exceptions.ServerCommunicationError;
 
@@ -79,23 +71,19 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
             greetings = "Hello, guest! You may login with the bottom right button!";
         } else greetings = "Hello and welcome back, user!";
         try {
-            // obtain 6 articles from offset 0
             progressBar.setProgress(20);
-            // res = ModelManager.getArticles(6, 0);
             res = ModelManager.getArticles();
             progressBar.setProgress(30);
+
             if (filter != "All") {
                 res = getFilteredList(res);
                 progressBar.setProgress(40);
             }
-            for (Article article : res) {
-                // We print articles in Log
+            for (Article article : res)
                 Log.i(TAG, article.toString());
-            }
         } catch (ServerCommunicationError e) {
             Log.e(TAG,e.getMessage());
         }
-
         progressBar.setProgress(50);
 
         return res;
@@ -122,8 +110,5 @@ public class LoadArticlesTask extends AsyncTask<Void, Void, List<Article>> {
         activity.findViewById(R.id.tbs_main).setVisibility(View.VISIBLE);
 
         progressBar.setVisibility(View.GONE);
-
     }
-
-
 }
